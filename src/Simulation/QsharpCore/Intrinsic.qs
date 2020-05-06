@@ -22,10 +22,22 @@ namespace Microsoft.Quantum.Intrinsic {
     /// # Output
     /// An integer $i$ with probability $\Pr(i) = p_i / \sum_i p_i$, where $p_i$
     /// is the $i$th element of `probs`.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// ```Q#
+    /// open Microsoft.Quantum.Arrays;
+    /// operation SampleBiasedCoin(): Int[]{
+    ///     return ForEach(Delay(Random, [0.25, 0.75], _), 
+    ///         ConstantArray(10, ()))
+    ///     );
+    /// }
+    /// // Returns an array of 10 random samples of a biased coin flip where it
+    /// // returns `0` 25% of the time and `1` 75% of the time.
+    /// ```
     operation Random (probs : Double[]) : Int {
         body intrinsic;
     }
-    
     
     /// # Summary
     /// Asserts that measuring the given qubits in the given Pauli basis will
@@ -45,9 +57,20 @@ namespace Microsoft.Quantum.Intrinsic {
     /// # Remarks
     /// Note that the Adjoint and Controlled versions of this operation will not
     /// check the condition.
-    ///
+    /// ## Example
+    /// ```Q#
+    /// operation CheckXSucceded() : Unit {
+    ///     using (q = Qubit()) {
+    ///         X(q);
+    ///         Assert([PauliZ], [q], One, "The Pauli X operation did not succeed.");
+    ///         Reset(q);
+    ///     }
+    /// }
+    /// // This operation should check that the `X` operation rotated the qubit
+    /// // staring in the |0⟩ state to the |1⟩ state.
+    /// ```
     /// # See Also
-    /// - AssertProb
+    /// - Microsoft.Quantum.Intrinsic.AssertProb
     operation Assert (bases : Pauli[], qubits : Qubit[], result : Result, msg : String) : Unit
     is Adj + Ctl {
         body intrinsic;
@@ -102,6 +125,14 @@ namespace Microsoft.Quantum.Intrinsic {
     /// # Remarks
     /// The specific behavior of this function is simulator-dependent,
     /// but in most cases the given message will be written to the console.
+    /// ## Example
+    /// ```Q#
+    /// function HelloWorld() : Unit {
+    ///     Message("Hello World!");
+    /// }
+    /// // With built-in simulator, prints "Hello World!" 
+    /// // to the console/output.
+    /// ```
     function Message (msg : String) : Unit {
         body intrinsic;
     }
@@ -116,7 +147,8 @@ namespace Microsoft.Quantum.Intrinsic {
     ///
     /// # Remarks
     /// This is a no-op. It is provided for completeness and because
-    /// sometimes it is useful to call the identity in an algorithm or to pass it as a parameter.
+    /// sometimes it is useful to call the identity in an algorithm or to pass
+    /// it as a parameter.
     operation I (target : Qubit) : Unit
     is Adj + Ctl {
         body (...) { }        
@@ -138,6 +170,26 @@ namespace Microsoft.Quantum.Intrinsic {
     /// # Input
     /// ## qubit
     /// Qubit to which the gate should be applied.
+    ///
+    /// # Remarks
+    /// ## Example
+    /// ```Q#
+    /// operation FlipQubit() : Unit {
+    ///     using (q = Qubit()) {
+    ///         X(q);
+    ///         Assert(
+    ///             [PauliZ], [q], One, 
+    ///             "The Pauli X operation did not succeed."
+    ///         );
+    ///         Reset(q);
+    ///     }
+    /// }
+    /// 
+    /// ```
+    ///
+    /// # See Also
+    /// - PauliX
+    ///
     operation X (qubit : Qubit) : Unit
     is Adj + Ctl {
         body intrinsic;
